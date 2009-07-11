@@ -18,6 +18,7 @@ public class NewUserWizard extends JDialog {
 
     public NewUserWizard(SidePanel main) {
         super(main.getFrame());
+        this.setLayout(new BorderLayout(10,10));
         this.setTitle("Guide for New User");
 
         JTabbedPane tab = new JTabbedPane(JTabbedPane.LEFT);

@@ -22,7 +22,8 @@ public class Loader {
         URL u = get("images");
         System.out.println(u);
     }
-    static final String PLUGIN_ID = "net.sf.jabref.external.p2pjabref";
+    // sync with plugin.xml if this changed too
+    static final String PLUGIN_ID = "com.google.code.jabrefpp";
     private static ClassLoader singleton;
     private static Map<String, URL> cache = new HashMap<String, URL>();
 
@@ -34,7 +35,7 @@ public class Loader {
         try {
             Plugin plugin = PluginCore.getManager().getPlugin(PLUGIN_ID);
             singleton = Util.getClassLoader(plugin);
-        } catch (PluginLifecycleException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 

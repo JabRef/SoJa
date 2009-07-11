@@ -160,7 +160,7 @@ public class NetworkDealer extends Thread {
     }
 
     private void handleDataPacket(Friend friend, DataPacket packet) throws IOException {
-        System.out.println("rx header = " + packet.header);
+        //System.out.println("rx header = " + packet.header);
         //if (false == packet.header.equals(BIBTEX_MESSAGE) && false == packet.header.equals(SEARCH_RESULT)) {
         if (false) {
             System.out.println("rx msg = " + packet.msg);
@@ -285,7 +285,7 @@ public class NetworkDealer extends Thread {
             return;
         }
 
-        System.out.println("tx to = " + friend.getName() + ", tx header = " + packet.header);
+        //System.out.println("tx to = " + friend.getName() + ", tx header = " + packet.header);
         //System.out.println("tx msg = " + msg);
 
         ObjectOutputStream out = peerSockets.get(friend);

@@ -31,7 +31,7 @@ public class SendDataThread extends Thread {
                 }
             } else {
                 DataPacket packet = queue.removeFirst();
-                System.out.println("dequeuing");
+                //System.out.println("dequeuing");
                 dealer.sendData(packet);
             }
         }
