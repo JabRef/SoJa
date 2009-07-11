@@ -13,7 +13,10 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -30,6 +33,7 @@ import model.friend.FriendsModel;
 import model.friend.Group;
 import test.FrameCreator;
 import util.FriendStringCodec;
+import util.service.WebShareFactory;
 import view.SplitPanel;
 
 /**
@@ -41,20 +45,21 @@ import view.SplitPanel;
 public class EditFriendsPanel extends JPanel {
 
     public static void main(String[] args) {
+        /*
         JFrame f = FrameCreator.createTestFrame();
         FriendsModel m = new FriendsModel(new Store("A"));
 
-    /*final EditFriendsPanel p = new EditFriendsPanel(m);
-    f.add(p);
+        final EditFriendsPanel p = new EditFriendsPanel(m);
+        f.add(p);
 
-    m.load();
+        m.load();
 
-    Group g = new Group("test");
-    m.addGroup(g);
-    //m.addFriend(new Friend("test", "test", "ip", 1, 1), g);
-    //m.addFriend(new Friend("test2", "test2", "ip", 1, 1), g);
-    m.save();
-    FrameCreator.packAndShow(f);*/
+        Group g = new Group("test");
+        m.addGroup(g);
+        //m.addFriend(new Friend("test", "test", "ip", 1, 1), g);
+        //m.addFriend(new Friend("test2", "test2", "ip", 1, 1), g);
+        m.save();
+        FrameCreator.packAndShow(f);*/
     }
 
     public EditFriendsPanel(SidePanel main) {
@@ -92,11 +97,12 @@ public class EditFriendsPanel extends JPanel {
         });
 
         final AddFriendPanel p = new AddFriendPanel();
+        p.setBorder(BorderFactory.createTitledBorder("Add your friends!"));
 
         JLabel lblEasyPaste = new JLabel("<html>Copy and paste the following in your email invite.<br>" +
                 "Your friend can then just paste your information <br>using the 'Text Input' above to add you.</html>");
         final JTextArea txtPasteForEmail = new JTextArea(FriendStringCodec.toString(main.getMyProfile()));
-        txtPasteForEmail.setEditable(false);
+        //txtPasteForEmail.setEditable(false);
         txtPasteForEmail.addFocusListener(new FocusAdapter() {
 
             public void focusGained(FocusEvent e) {
@@ -115,11 +121,53 @@ public class EditFriendsPanel extends JPanel {
         });
 
         JPanel pnlEasyInvite = new JPanel(new BorderLayout());
-        pnlEasyInvite.add(lblEasyPaste, BorderLayout.NORTH);
-        pnlEasyInvite.add(new JScrollPane(txtPasteForEmail));
-        pnlEasyInvite.add(copy, BorderLayout.SOUTH);
+
+        JPanel pnlInvite = new JPanel(new BorderLayout());
+        pnlInvite.add(lblEasyPaste, BorderLayout.NORTH);
+        pnlInvite.add(new JScrollPane(txtPasteForEmail));
+        // pnlInvite.add(copy, BorderLayout.SOUTH);
+        pnlEasyInvite.add(pnlInvite, BorderLayout.NORTH);
+
+        final String linkUrl = "http://code.google.com/p/jabrefpp/wiki/GettingStarted";
+
+        JPanel pnlWebEmail = new JPanel();
+        pnlWebEmail.setBorder(BorderFactory.createTitledBorder("Email"));
+        for (final WebShareFactory.WebShareService webShareService : WebShareFactory.getEmailServices()) {
+            JButton btn = new JButton(webShareService.getLabel(), webShareService.getIcon());
+            pnlWebEmail.add(btn);
+            btn.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        webShareService.doAction(linkUrl, "Try JabRef peer-to-peer with me", "Copy the following to add me\n" + txtPasteForEmail.getText());
+                    } catch (Exception ex) {
+                        Logger.getLogger(EditFriendsPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        }
+        pnlEasyInvite.add(pnlWebEmail);
+
+        JPanel pnlWebSocial = new JPanel();
+        pnlWebSocial.setBorder(BorderFactory.createTitledBorder("Post"));
+        for (final WebShareFactory.WebShareService webShareService : WebShareFactory.getSocialService()) {
+            JButton btn = new JButton(webShareService.getLabel(), webShareService.getIcon());
+            pnlWebSocial.add(btn);
+            btn.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        webShareService.doAction(linkUrl, "Try JabRef peer-to-peer with me", "Copy the following to add me\n" + txtPasteForEmail.getText());
+                    } catch (Exception ex) {
+                        Logger.getLogger(EditFriendsPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        }
+        pnlEasyInvite.add(pnlWebSocial, BorderLayout.SOUTH);
+
         pnlEasyInvite.setBorder(BorderFactory.createTitledBorder("Invite your friends now!"));
-        this.add(new SplitPanel(pnlEasyInvite, p, BorderLayout.NORTH));
+        this.add(new SplitPanel(pnlEasyInvite, p, BorderLayout.SOUTH));
 
 
         currentGroupList.setPrototypeCellValue("Choose Group");

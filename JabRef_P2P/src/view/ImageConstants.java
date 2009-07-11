@@ -1,7 +1,10 @@
 package view;
 
+import java.io.File;
+
 /**
- *
+ * 0.1 | 10/7/2009
+ * + Added web services images
  * @author Thien Rong
  */
 public interface ImageConstants {
@@ -38,7 +41,23 @@ public interface ImageConstants {
     // chat
     String CHAT = BASEPATH + "028.png";
     String GROUP_CHAT = BASEPATH + "030.png";
-
+    //rate
+    String STAR_OFF = BASEPATH + "star_off_16.png";
+    String STAR_HALF = BASEPATH + "star_half_16.png";
+    String STAR_FULL = BASEPATH + "star_16.png";
+    String STAR_GLOW = BASEPATH + "star_glow_16.png";
+    // others
     String DELETE = BASEPATH + "delete.png";
     String INFO = BASEPATH + "Info.png";
+    // web (using code in websharefactory to generate)
+    String WEB_AOL = BASEPATH + "web_aol.png";
+    String WEB_DELICIOUS = BASEPATH + "web_delicious.png";
+    String WEB_EMAIL = BASEPATH + "web_email.png";
+    String WEB_FACEBOOK = BASEPATH + "web_facebook.png";
+    String WEB_FRIENDFEED = BASEPATH + "web_friendfeed.png";
+    String WEB_GMAIL = BASEPATH + "web_gmail.png";
+    String WEB_HOTMAIL = BASEPATH + "web_hotmail.png";
+    String WEB_MYSPACE = BASEPATH + "web_myspace.png";
+    String WEB_SU = BASEPATH + "web_su.png";
+    String WEB_YAHOO = BASEPATH + "web_yahoo.png";
 }

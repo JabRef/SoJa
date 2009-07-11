@@ -15,10 +15,14 @@ import net.sf.jabref.BibtexEntry;
 
 import util.CustomBibtexField;
 import core.SidePanel;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JTextArea;
-import model.friend.FriendsModel;
+import javax.swing.tree.TreePath;
 import model.friend.FriendsModel;
 import model.friend.FriendsTreeModel;
+import view.friend.CheckTreeManager;
 
 /**
  *
@@ -30,6 +34,8 @@ public class EditShareDialog extends JDialog {
     BibtexEntry[] entries;
     FriendsTree treeFriends;
     SidePanel main;
+    // 
+    final CheckTreeManager checkTreeManager;
 
     public EditShareDialog(SidePanel main) {
         this.main = main;
@@ -41,6 +47,7 @@ public class EditShareDialog extends JDialog {
         this.add(new JScrollPane(txtCurrentShare), BorderLayout.NORTH);
 
         treeFriends = new FriendsTree(new FriendsTreeModel(main.getFriendsModel()));
+        checkTreeManager = new CheckTreeManager(treeFriends);
         this.add(new JScrollPane(treeFriends));
 
         JPanel ctrlPanel = new JPanel();
@@ -48,16 +55,15 @@ public class EditShareDialog extends JDialog {
         btnShare.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                editShare(entries, true, treeFriends.getSelectedFriendIDs());
+                setShare(entries, true, treeFriends.getCheckedFriendIDs(checkTreeManager));
                 EditShareDialog.this.setVisible(false);
             }
         });
 
-        JButton btnDontShare = new JButton("Remove Share from selected");
+        JButton btnDontShare = new JButton("Cancel");
         btnDontShare.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                editShare(entries, false, treeFriends.getSelectedFriendIDs());
                 EditShareDialog.this.setVisible(false);
             }
         });
@@ -69,7 +75,10 @@ public class EditShareDialog extends JDialog {
 
     public void setEntries(BibtexEntry[] entries, FriendsModel model) {
         this.entries = entries;
+        Set<String> FUIDs = getShare(entries);
         txtCurrentShare.setText(generateShareString(entries, model));
+        treeFriends.setCheckedFriendIDs(checkTreeManager, FUIDs);
+
         this.pack();
     }
 
@@ -102,6 +111,41 @@ public class EditShareDialog extends JDialog {
         return sb.toString().trim();
     }
 
+    /**
+     * Get the set of Friend entries are shared to (can be partial)
+     * @param entries
+     * @return
+     */
+    private Set<String> getShare(BibtexEntry[] entries) {
+        Set<String> FUIDs = new HashSet<String>();
+
+        for (int i = 0; i < entries.length; i++) {
+            BibtexEntry bibtexEntry = entries[i];
+            List<String> sharedToFriends = CustomBibtexField.getBibtexShare(bibtexEntry);
+            FUIDs.addAll(sharedToFriends);
+        }
+        return FUIDs;
+    }
+
+    /**
+     * Replace the share with the FUIDs
+     * @param entries
+     * @param toShare
+     * @param FUIDs
+     */
+    private void setShare(BibtexEntry[] entries, boolean toShare, Collection<String> FUIDs) {
+        for (BibtexEntry bibtexEntry : entries) {
+            CustomBibtexField.updateEntry(main.getFrame().basePanel(), bibtexEntry, FUIDs);
+        }
+
+    }
+
+    /**
+     * @deprecated because using setShare with Checked Tree
+     * @param entries
+     * @param toShare
+     * @param FUIDs
+     */
     private void editShare(BibtexEntry[] entries, boolean toShare, Collection<String> FUIDs) {
         if (toShare) {
             for (BibtexEntry bibtexEntry : entries) {
