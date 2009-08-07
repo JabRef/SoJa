@@ -1,0 +1,7 @@
+#summary Limitations of JabRef pp
+
+= Introduction =
+
+* OpenLookup 20-byte limit for key so high chance of collision
+* OpenLookup have no security to prevent someone from posting over your key
+* OpenLookup can store data for only last a week the most
