@@ -1,14 +1,16 @@
-#summary One-sentence summary of this page.
+#summary Using Jabref p2p to collaborate with others on Jabref
 
 = Introduction =
 
-1) Installation
+  1) Installation
+TODO take screenshots of Jabref 2.5 
+a) Plugins > Manage Plugins
+b) Download Plugin
+c) URL to download
 
-2) Usage
+  2) Usage
+TODO show screenshot
+a) Login/Create at Welcome Screen
+b) Help Button/New User Wizard
 
 = Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
