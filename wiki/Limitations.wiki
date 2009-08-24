@@ -1,4 +1,4 @@
-#summary Limitations of JabRef pp
+#summary Limitations of JabRef P2P
 
 = Introduction =
 
@@ -7,3 +7,5 @@
 *  OpenLookup have no security to prevent someone from posting over your key
 
 *  OpenLookup can store data for only last a week the most
+
+*  Will not change to Jabref source, unless absolutely neccessary
