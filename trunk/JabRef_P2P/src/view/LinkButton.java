@@ -10,19 +10,19 @@ import java.awt.Insets;
 import javax.swing.JButton;
 
 /**
- *
+ * DeriveSize decide the size
  * @author Thien Rong
  */
 public class LinkButton extends JButton {
 
-    public static void main(String[] args) {        
+    public static void main(String[] args) {
         new LinkButton("A", 80);
     }
     private Cursor tagCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-    static final int MIN = 12,  MAX = 30;
+    static final int MIN = 12, MAX = 30;
 
     public LinkButton(String text, int size) {
-        super(text);        
+        super(text);
         this.setBorderPainted(false);
         this.setContentAreaFilled(false);
         this.setOpaque(false);
@@ -31,17 +31,26 @@ public class LinkButton extends JButton {
         this.setCursor(tagCursor);
     }
 
+    /**
+     * Normalized so between MIN to MAX
+     * Then using log function to make small number grow big easily too
+     * But slower grow as freq increases
+     * @param freq
+     * @return
+     */
     private float deriveSize(int freq) {
         int diff = MAX - MIN + 1;
         // (problem => too small)
         //int finalSize = (diff * freq / total) + MIN;
         // absolute size using log        
-        int finalSize = (int) (diff * Math.min(10, Math.log(Math.max(2, freq - 10))) / 10 + MIN);        
+        int finalSize = (int) (diff * Math.min(10, Math.log(Math.max(2, freq - 10))) / 10 + MIN);
         // (if > diff will be much much larger) Math.round((12 * (tag.getUsercount() - userCountMin)) / ((userCountMax - userCountMin) + 1)) + 12;
         // absolute size, 5 type of sizes
         //int finalSize = (int) (MIN + (diff * Math.min(1, freq / 100f)));
         //System.out.println("(" + diff + "," + freq + "," + total + ") + " + MIN + "=" + finalSize);
 
+        //return finalSize;
+        System.out.println("final size " + finalSize);
         return finalSize;
     }
 }

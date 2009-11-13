@@ -1,4 +1,4 @@
-package model;
+package model.friend;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -4,16 +4,21 @@ import javax.swing.SwingUtilities;
 import core.NetworkDealer;
 import core.SidePanel;
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import model.FriendReview;
@@ -22,6 +27,7 @@ import net.sf.jabref.BasePanel;
 import net.sf.jabref.BibtexEntry;
 import util.CustomBibtexField;
 import util.Loader;
+import util.Tag;
 
 /**
  * 0.1 | 13/6/2009
@@ -38,6 +44,7 @@ public class MyEntryEditor extends JPanel implements PropertyChangeListener, Ima
     JLabel lblRating = new JLabel();
     JLabel lblPeersWithItem = new JLabel();
     JRating ratings = new JRating(CustomBibtexField.MAX_RATING);
+    JPanel pnlTags = new JPanel();
     SidePanel main;
     //
     BibtexEntry entry;
@@ -56,15 +63,28 @@ public class MyEntryEditor extends JPanel implements PropertyChangeListener, Ima
                 forceRefreshReview();
             }
         });
+        //pnlTags.setLayout(new BoxLayout(pnlTags, BoxLayout.Y_AXIS));
+        pnlTags.setBorder(BorderFactory.createTitledBorder("Recommended Tags"));
+        //pnlTags.setMaximumSize(new Dimension(150,100));
+        //pnlTags.setPreferredSize(new Dimension(300,500));
+        
+        JPanel pnlCtrl = new JPanel();
+        //pnlCtrl.setLayout(new GridLayout(0,1));
+        pnlCtrl.setLayout(new BoxLayout(pnlCtrl, BoxLayout.Y_AXIS));
 
-        JPanel pnlCtrl = new JPanel(new GridLayout(0, 1));
         pnlCtrl.add(btnPeer);
         pnlCtrl.add(ratings);
         pnlCtrl.add(lblRating);
         pnlCtrl.add(lblPeersWithItem);
         pnlCtrl.add(btnViewReviews);
+        pnlCtrl.add(pnlTags);
+        ratings.setAlignmentX(Component.LEFT_ALIGNMENT);
+        lblRating.setAlignmentX(Component.LEFT_ALIGNMENT);
+        lblPeersWithItem.setAlignmentX(Component.LEFT_ALIGNMENT);
+        pnlTags.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         this.add(pnlCtrl, BorderLayout.NORTH);
+        //this.add(pnlCtrl);
 
         ratings.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -75,9 +95,32 @@ public class MyEntryEditor extends JPanel implements PropertyChangeListener, Ima
     }
 
     public void setReviews() {
-        if(entry == null){
-            return; 
+        if (entry == null) {
+            return;
         }
+        // recommend tags
+        Set<String> keywords = Tag.extractKeywords(entry);
+        int prevSize = keywords.size();
+
+        Set<String> possibleKeywords = Tag.extractPossibleTags(entry);
+        possibleKeywords.removeAll(keywords);
+        pnlTags.removeAll();
+        for (final String recomTag : possibleKeywords) {
+            final JButton btn = new JButton(recomTag);
+            pnlTags.add(btn);
+            btn.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent e) {
+                    Set<String> keywords = Tag.extractKeywords(entry);
+                    keywords.add(recomTag);
+                    Tag.updateTags(entry, keywords);
+
+                    pnlTags.remove(btn);
+                    pnlTags.updateUI();
+                }
+            });
+        }
+
         // to calculate avg rating (including self)
         int totalRating = 0;
         int numRating = 0;
@@ -124,7 +167,10 @@ public class MyEntryEditor extends JPanel implements PropertyChangeListener, Ima
                     public void actionPerformed(ActionEvent e) {
                         ReviewDialog dialog = new ReviewDialog(entry, bp);
                         for (Map.Entry<String, String> entry : diffReviews.entrySet()) {
-                            dialog.handleChange(entry.getValue(), entry.getKey());
+                            Friend f = main.getFriendsModel().findFriend(entry.getKey());
+                            String displayName = (f != null) ? f.getName() : entry.getKey();
+
+                            dialog.handleChange(entry.getValue(), displayName);
                         }
                         dialog.setVisible(true);
                     }

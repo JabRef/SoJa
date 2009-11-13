@@ -281,7 +281,7 @@ public class EmailView extends JFrame implements AttachmentEntryListener {
 
         }
 
-        BibtexMessage message = new BibtexMessage(subject, txtMsg.getText(),
+        BibtexMessage message = new BibtexMessage(null, subject, txtMsg.getText(),
                 entriesStr, txtTo.getText());
         for (Friend friend : friends) {
             main.getDealer().queueBibtexMessage(friend.getFUID(), message);

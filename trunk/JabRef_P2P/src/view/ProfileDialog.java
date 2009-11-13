@@ -43,7 +43,7 @@ public class ProfileDialog extends JFrame implements ImageConstants {
         boolean isFriendAlready = main.findFriend(friend.getFUID()) != null;
 
         entriesPanel = new EntriesPanel(main, friend, "entries");
-        friendsPanel = new FriendsPanel(main, "Friends");
+        friendsPanel = new FriendsPanel(main, "Friends", FriendsPanel.MODE_NAME_ICON);
         //tagPanel = new TagCloudPanel(main, 500);
         //tagPanel.setBorder(BorderFactory.createTitledBorder("Tags"));
         tagPanel = new TagListPanel(main, friend.getName() + "'s Tags");

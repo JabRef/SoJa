@@ -15,7 +15,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.BibtexMessage;
+import model.BibtexMessageCodec;
 import model.DownloadRequest;
 import model.DownloadResponse;
 import net.sf.jabref.BibtexEntry;
@@ -52,14 +55,14 @@ public class NetworkDealer extends Thread {
     private SidePanel main;
     private FileDealer fileDealer;
     private LinkedList<DataPacket> queue = new LinkedList<DataPacket>();
-    private static final String BIBTEX_MESSAGE = "00",  IM = "01", //
-             SEARCH_REQUEST = "02",  SEARCH_RESULT = "03", //
-             BROWSE_REQUEST = "04",  BROWSE_RESULT = "05",//
-             DOWNLOAD_REQUEST = "06",  DOWNLOAD_RESPONSE = "07", //
-             FRIEND_STATUS = "08", //
-             PULL_RSS_REQUEST = "09",  PULL_RSS_RESULT = "10", //
-             PROFILE_REQUEST = "11",  PROFILE_RESULT = "12", //
-             FRIEND_REQUEST = "13",  ACCEPTED_FRIEND_REQUEST = "14";
+    private static final String BIBTEX_MESSAGE = "00", IM = "01", //
+            SEARCH_REQUEST = "02", SEARCH_RESULT = "03", //
+            BROWSE_REQUEST = "04", BROWSE_RESULT = "05",//
+            DOWNLOAD_REQUEST = "06", DOWNLOAD_RESPONSE = "07", //
+            FRIEND_STATUS = "08", //
+            PULL_RSS_REQUEST = "09", PULL_RSS_RESULT = "10", //
+            PROFILE_REQUEST = "11", PROFILE_RESULT = "12", //
+            FRIEND_REQUEST = "13", ACCEPTED_FRIEND_REQUEST = "14";
 
     private NetworkDealer(JabRefFrame frame, ServerSocket serverSocket, FileDealer fileDealer, SidePanel main) {
         this.frame = frame;
@@ -167,7 +170,8 @@ public class NetworkDealer extends Thread {
         }
 
         if (BIBTEX_MESSAGE.equals(packet.header)) {
-            BibtexMessage msg = (BibtexMessage) packet.object;
+            //BibtexMessage msg = (BibtexMessage) packet.object;
+            BibtexMessage msg = BibtexMessageCodec.fromString(packet.msg);
             main.handleRecvBibtexEntry(friend, msg);
 
         } else if (IM.equals(packet.header)) {
@@ -295,8 +299,14 @@ public class NetworkDealer extends Thread {
             friend.setConnected(false);
             ObjectOutputStream useless = peerSockets.remove(friend);
             ObjectCleaner.cleanCloseable(useless);
-            frame.showMessage("Connection to " + friend.getName() + " Lost. Please Retry again");
-            ex.printStackTrace();
+
+            if (packet.header.equals(this.BIBTEX_MESSAGE)) {
+                // send offline if user want
+                main.sendOfflineMessage(friend, packet);
+            } else {
+                frame.showMessage("Connection to " + friend.getName() + " Lost. Please Retry again");
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -439,7 +449,11 @@ public class NetworkDealer extends Thread {
     }
 
     public void queueBibtexMessage(String FUID, BibtexMessage msg) {
-        this.sendData(FUID, BIBTEX_MESSAGE, null, msg);
+        try {
+            this.sendData(FUID, BIBTEX_MESSAGE, BibtexMessageCodec.toString(msg));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public LinkedList<DataPacket> getQueue() {

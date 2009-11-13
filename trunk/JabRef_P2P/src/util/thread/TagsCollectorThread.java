@@ -8,9 +8,11 @@ import java.util.Map;
 import javax.swing.Timer;
 import model.friend.Friend;
 import util.visitor.FriendVisitor;
+import util.visitor.TagFreqVisitor;
 
 /**
- *
+ * 0.1 | 10 Sep 2009
+ * + Add collect for own tag
  * @author Thien Rong
  */
 public class TagsCollectorThread extends Thread {
@@ -35,6 +37,9 @@ public class TagsCollectorThread extends Thread {
                 Thread.sleep(checkNewFriendsDelay);
             } catch (InterruptedException ex) {
             }
+
+            TagFreqVisitor tfVisitor = main.getLocalTagFreqVisitor();
+            main.setMyTags(tfVisitor.getTagFreq());
 
             main.getFriendsModel().visitAllFriends(new FriendVisitor() {
 
@@ -70,9 +75,9 @@ public class TagsCollectorThread extends Thread {
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("auto collecting tags");
                     main.getDealer().sendBrowseRequest(FUID, null);
-                // don't need reset unless the packet loss since will get
-                // result and auto reset
-                //resetTimer(FUID);
+                    // don't need reset unless the packet loss since will get
+                    // result and auto reset
+                    //resetTimer(FUID);
                 }
             });
             t.setRepeats(false);

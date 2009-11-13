@@ -167,7 +167,7 @@ public class TagCloudModel {
         // n > (total-n) choose removed total-n items, n < (total-n) get first n
         int total = tfs.size();
         if (total <= n) {
-            // do nothing since size okay already
+                        // do nothing since size okay already
         } else if (n > total - n) {
             while (tfs.size() > n) {
                 tfs.remove(tfs.last());

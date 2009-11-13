@@ -249,7 +249,7 @@ public class FriendsTree extends JTree {
 
 class MyFriendRenderer extends DefaultTreeCellRenderer implements ImageConstants {
 
-    final ImageIcon onlineIcon = new ImageIcon(Loader.get(SMILE)),  offlineIcon = new ImageIcon(Loader.get(OFFLINE));
+    final ImageIcon onlineIcon = new ImageIcon(Loader.get(SMILE)),  offlineIcon = new ImageIcon(Loader.get(OFFLINE));    
 
     public Component getTreeCellRendererComponent(
             JTree tree,

@@ -13,7 +13,7 @@ public class EditFriendDialog extends JDialog {
         super(main.getFrame());
         this.setTitle("Edit Friends");
 
-        this.add(new EditFriendsPanel(main));
+        this.add(new EditFriendsPanel(main, true));
         this.pack();
     }
 }

@@ -21,6 +21,7 @@ import test.FrameCreator;
 import util.FriendStringCodec;
 
 /**
+ * @deprecated use addfriendpanel2 which uses invite code only
  * 2 ways to add. 1st manual, 2nd textarea paste from friend
  * Use getFriends method for getting the result
  * @author Thien Rong
@@ -44,7 +45,7 @@ public class AddFriendPanel extends JPanel {
     JTextArea txtInput = new JTextArea("Paste the text, eg \nname\nIP address\nMain port\nFile Port");
     final JTextField txtName = new JTextField("");
     final JTextField txtIP = new JTextField("");
-    final JSpinner spnPort,  spnFilePort;
+    final JSpinner spnPort, spnFilePort;
     JTabbedPane tabbedPane = new JTabbedPane();
 
     public AddFriendPanel() {

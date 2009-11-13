@@ -19,7 +19,6 @@ public class FriendsModel implements Persistable<FriendsModel> {
 
     // for faster reference only
     transient Map<String, Friend> friends = new HashMap<String, Friend>();
-
     // groupName -> Group object
     HashMap<String, Group> groups = new HashMap<String, Group>();
     Store s;
@@ -150,7 +149,7 @@ public class FriendsModel implements Persistable<FriendsModel> {
         try {
             ArrayList<Group> g = new ArrayList<Group>(groups.values());
             s.writeObject(g, PERSIST_NAME);
-        //s.writeXML(g, "Groups");
+            //s.writeXML(g, "Groups");
 
         } catch (Exception ex) {
             System.out.println("Friend & Groups not saved: " + ex.getMessage());

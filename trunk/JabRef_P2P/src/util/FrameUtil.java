@@ -96,6 +96,7 @@ public class FrameUtil {
         return handler;
     }
 
+
     public static void autoInsertTag(JabRefFrame frame) {
         AutoTagVisitor handler = new AutoTagVisitor();
         run(frame, handler);
