@@ -1,16 +1,28 @@
 #summary Using Jabref p2p to collaborate with others on Jabref
+#labels Featured
 
-= Introduction =
+=Requirement=
+  * Jabref 2.5,
+  * Both friends need to have the plugin installed to see each other
 
+=Getting Started=
   1) Installation
-TODO take screenshots of Jabref 2.5 
-a) Plugins > Manage Plugins
-b) Download Plugin
-c) URL to download
+Run Jabref 2.5 and follow the 3 steps to install the plugin
+  a) *Plugins > Manage Plugins*
+<br/><img src="http://jabrefpp.googlecode.com/files/managePlugin.png" width="700">
+
+  b) *Download Plugin*
+From the bottom options, choose "Download plugin", and enter <br/>http://jabrefpp.googlecode.com/files/com.google.code.jabrefpp-1.0.jar
+<br/><img src="http://jabrefpp.googlecode.com/files/downloadPlugin.png">
+
+  c) *Restart Jabref*
+Shutdown and reopen your Jabref and the plugin "JabRef p2p" should be in your plugin tab now.
+<br/><img src="http://jabrefpp.googlecode.com/files/installSuccess.png">
+
 
   2) Usage
-TODO show screenshot
-a) Login/Create at Welcome Screen
-b) Help Button/New User Wizard
-
-= Details =
+  a) Run the plugin with, *Plugins > JabRef p2p*
+<br/><img src="http://jabrefpp.googlecode.com/files/runPlugin.png" width="700">
+  b) *Enter a name*
+Just enter a name your friends will recognize. After entering your name, there is a built-in user guide to help you with the various functions to using JabRef p2p.
+<br/><img src="http://jabrefpp.googlecode.com/files/enterName.png">
