@@ -22,7 +22,7 @@ Shutdown and reopen your Jabref and the plugin "Jabref p2p" should be in your pl
 
   2) Usage
   a) Run the plugin with, *Plugins > Jabref p2p*
-<br/><img src="http://jabrefpp.googlecode.com/files/runPlugin.png" width="800">
+<br/><img src="http://jabrefpp.googlecode.com/files/runPlugin.png" width="700">
   b) *Enter a name*
 Just enter a name your friends will recognize. After entering your name, there is a built-in user guide to help you with the various functions to using Jabref p2p.
 <br/><img src="http://jabrefpp.googlecode.com/files/enterName.png">
