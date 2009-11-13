@@ -2,7 +2,7 @@
 #labels Featured
 
 =Requirement=
-  * <a href =http://sourceforge.net/projects/jabref/files/jabref/2.5/>Jabref 2.5</a>,
+  * [http://sourceforge.net/projects/jabref/files/jabref/2.5/ Jabref 2.5],
   * Both friends need to have the plugin installed to see each other
 
 =Getting Started=
