@@ -104,7 +104,7 @@ public class WebShareFactory implements ImageConstants {
         public void doAction(String linkUrl, String title, String desc) throws IOException, URISyntaxException {
             // add url to desc if this service don't use url (eg email)
             if (url.contains("{url}") == false) {
-                desc = linkUrl + "\n" + desc;
+                desc = linkUrl + "\n\n" + desc;
             }
             d.browse(new URI(this.url.replaceAll("\\{url\\}", e(linkUrl)).replaceAll("\\{title\\}", e(title)).replaceAll("\\{desc\\}", e(desc))));
         }

@@ -33,19 +33,22 @@ public class TagListPanel extends JPanel {
                 tp.addTag("test", freq);
                 //System.out.println("i="+i);
             }
-            JScrollPane sp = new JScrollPane(tp);
+            JScrollPane sp = new JScrollPane(tp, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
             /*sp.getViewport().setViewSize(new Dimension(300, 300));
             /*sp.setMaximumSize(new Dimension(300,300));
             tp.setSize(500,500);
             sp.setSize(300, 300);*/
             JPanel pp = new JPanel();
             //pp.setSize(300, 300);
-            pp.add(new JButton("A"));
-            pp.setLayout(new BoxLayout(pp, BoxLayout.PAGE_AXIS));
-            pp.add(sp);
-            tabbedPane.add(pp);
-            f.add(tabbedPane);
-            f.setSize(300, 300);
+            //pp.add(new JButton("A"));
+            pp.setLayout(new BorderLayout());
+            //pp.setLayout(new BoxLayout(pp, BoxLayout.PAGE_AXIS));
+            pp.add(sp, BorderLayout.NORTH);
+            //tabbedPane.add(pp);
+            f.add(pp);
+            //f.add(tabbedPane);
+            //f.setSize(300, 300);
+            f.pack();
             f.setVisible(true);
         }
     }
@@ -54,7 +57,9 @@ public class TagListPanel extends JPanel {
     public TagListPanel(ActionHandler handler, String title) {
         this.handler = handler;
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        this.setBorder(BorderFactory.createTitledBorder(title));
+        if (title != null) {
+            this.setBorder(BorderFactory.createTitledBorder(title));
+        }
     }
 
     public void setTags(SortedSet<TagFreq> tagFreq) {
@@ -73,6 +78,5 @@ public class TagListPanel extends JPanel {
                 handler.handleViewTag(keyword);
             }
         });
-
     }
 }

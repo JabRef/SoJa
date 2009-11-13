@@ -21,11 +21,11 @@ public class MessagesTreeModel extends DefaultTreeModel implements Persistable<M
     public static void main(String[] args) throws Exception {
         Store s = new Store("test");
         MessagesTreeModel model = new MessagesTreeModel(s);
-        model.msgs.add(new BibtexMessage("sub", "msg", "", "to"));
-        model.msgs.add(new BibtexMessage("sub", "msg", "", "to"));
-        model.msgs.add(new BibtexMessage("sub", "msgxxxx", "", "to"));
-        model.msgs.add(new BibtexMessage("sub", "msg\n\n\n", "", "to"));
-        model.msgs.add(new BibtexMessage("sub", "\n123\n\n", "", "to"));
+        model.msgs.add(new BibtexMessage(null, "sub", "msg", "", "to"));
+        model.msgs.add(new BibtexMessage(null, "sub", "msg", "", "to"));
+        model.msgs.add(new BibtexMessage(null, "sub", "msgxxxx", "", "to"));
+        model.msgs.add(new BibtexMessage(null, "sub", "msg\n\n\n", "", "to"));
+        model.msgs.add(new BibtexMessage(null, "sub", "\n123\n\n", "", "to"));
 
         model.save();
 
@@ -51,6 +51,15 @@ public class MessagesTreeModel extends DefaultTreeModel implements Persistable<M
                 addNode(msg);
                 updateCount();
                 save();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsMessage(BibtexMessage msg){
+        for (BibtexMessage bibtexMessage : msgs) {
+            if(msg.getGUID().equals(bibtexMessage.getGUID())){
                 return true;
             }
         }

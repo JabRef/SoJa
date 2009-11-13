@@ -4,18 +4,20 @@ import java.io.Serializable;
 import java.util.Collection;
 import net.sf.jabref.BibtexEntry;
 import util.BibtexStringCodec;
+import util.GlobalUID;
 
 /**
- *
+ * 0.2 | 14 Sep 2009
+ * + Added GUID to know if read
  */
 public class BibtexMessage implements Serializable {
 
     public static void main(String[] args) {
-        System.out.println(new BibtexMessage("sub", "msg", "", "to").getSummary(2));
-        System.out.println(new BibtexMessage("sub", "msg", "", "to").getSummary(3));
-        System.out.println(new BibtexMessage("sub", "msgxxxx", "", "to").getSummary(4));
-        System.out.println(new BibtexMessage("sub", "msg\n\n\n", "", "to").getSummary(5));
-        System.out.println(new BibtexMessage("sub", "\n123\n\n", "", "to").getSummary(5));
+        System.out.println(new BibtexMessage(null, "sub", "msg", "", "to").getSummary(2));
+        System.out.println(new BibtexMessage(null, "sub", "msg", "", "to").getSummary(3));
+        System.out.println(new BibtexMessage(null, "sub", "msgxxxx", "", "to").getSummary(4));
+        System.out.println(new BibtexMessage(null, "sub", "msg\n\n\n", "", "to").getSummary(5));
+        System.out.println(new BibtexMessage(null, "sub", "\n123\n\n", "", "to").getSummary(5));
     }
     // to is string because might send to people u don't know. So might not be able to get back name
     private String to;
@@ -25,12 +27,18 @@ public class BibtexMessage implements Serializable {
     private String msg;
     // not created at constructor and set only when receive
     private String fromFUID;
+    private String GUID;
 
-    public BibtexMessage(String subject, String msg, String entries, String to) {
+    public BibtexMessage(String GUID, String subject, String msg, String entries, String to) {
         this.subject = subject;
         this.msg = msg;
         this.entries = entries;
         this.to = to;
+        if (GUID == null) {
+            this.GUID = GlobalUID.generate("");
+        } else {
+            this.GUID = GUID;
+        }
     }
 
     public void setFriend(String fromFUID) {
@@ -51,7 +59,7 @@ public class BibtexMessage implements Serializable {
 
     public String getSummary(int maxLen) {
         StringBuffer sb = new StringBuffer(subject);
-        if(msg.length() > 0){
+        if (msg.length() > 0) {
             sb.append(" - ").append(msg);
         }
         if (maxLen < 3 || (sb.length() <= maxLen)) {
@@ -69,6 +77,11 @@ public class BibtexMessage implements Serializable {
         return to;
     }
 
+    public String getGUID() {
+        return GUID;
+    }
+
+    @Override
     public String toString() {
         return subject;
     }

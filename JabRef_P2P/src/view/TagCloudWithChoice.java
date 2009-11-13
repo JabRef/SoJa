@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import model.TagFreq;
 import core.SidePanel;
+import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.TreeSet;
@@ -69,14 +70,17 @@ public class TagCloudWithChoice extends JPanel {
     }
     private SidePanel main;
     private boolean showMine = true;
-    private TagCloudPanel cloudPanel;
+    //private TagCloudPanel cloudPanel;
+    private TagListPanel listPanel;
 
     public TagCloudWithChoice(SidePanel main, String title) {
         super(new BorderLayout());
         this.main = main;
 
-        cloudPanel = new TagCloudPanel(main, 250);
-        cloudPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
+        //cloudPanel = new TagCloudPanel(main, 250);
+        //cloudPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
+
+        listPanel = new TagListPanel(main, null);
 
         JLabel lblShow = new JLabel("Show: ");
         String[] showStrings = {"Mine", "My Friends"};
@@ -108,10 +112,19 @@ public class TagCloudWithChoice extends JPanel {
             }
         });
         this.add(new SplitPanel(showList, lblShow, BorderLayout.WEST), BorderLayout.NORTH);
-        JScrollPane sp = new JScrollPane(cloudPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.add(cloudPanel);
 
-        this.setBorder(BorderFactory.createTitledBorder(title));
+//        JScrollPane sp = new JScrollPane(cloudPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+//        this.add(cloudPanel);
+        //JScrollPane sp = new JScrollPane(listPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane sp = new JScrollPane(listPanel);
+        sp.setMaximumSize(new Dimension(300, 200));
+        sp.setPreferredSize(new Dimension(300, 200));
+
+        //this.add(sp, BorderLayout.NORTH);
+        this.add(sp);
+
+
+        //this.setBorder(BorderFactory.createTitledBorder(title));
     }
 
     public void updateView() {
@@ -122,6 +135,10 @@ public class TagCloudWithChoice extends JPanel {
             tagsToShow = main.getTagCloudModel().getOtherTopFreq(30);
         }
 
-        cloudPanel.setTags(tagsToShow);
+        //cloudPanel.setTags(tagsToShow);
+        listPanel.setTags(tagsToShow);
+        System.out.println("listPanel " + listPanel);
+
+        this.updateUI();
     }
 }

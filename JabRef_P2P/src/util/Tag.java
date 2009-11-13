@@ -74,7 +74,7 @@ public class Tag {
 
         String journal = extractJournal(entry);
         if (journal != null) {
-            keywords.add(journal);
+    //        keywords.add(journal);
 
         //System.out.println(keywords);
 

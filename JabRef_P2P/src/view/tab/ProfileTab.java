@@ -49,14 +49,16 @@ public class ProfileTab extends ITab {
     public ProfileTab(final SidePanel main) {
         super(main);
         this.setLayout(new GridLayout(0, 1));
-        final JTextField txtMyStatus = new JTextField("What are you doing now?");
+        final JTextField txtMyStatus = new JTextField(main.getMyProfile().getCurrStatus());
         txtMyStatus.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+                final String newStatus = txtMyStatus.getText().trim();
+                main.getMyProfile().setCurrStatus(newStatus);
+                main.getDht().updateStatus(newStatus, main.getMyProfile());
                 main.getFriendsModel().visitAllFriends(new FriendVisitor() {
 
                     public void visitFriend(Friend f) {
-                        String newStatus = txtMyStatus.getText().trim();
                         if (f.isConnected()) {
                             main.getDealer().sendCurrStatus(f.getFUID(), newStatus);
                         }

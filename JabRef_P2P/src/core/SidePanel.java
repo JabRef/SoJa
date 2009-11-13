@@ -2,6 +2,8 @@ package core;
 
 import ca.odell.glazedlists.event.ListEvent;
 import ca.odell.glazedlists.event.ListEventListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.ChangeEvent;
 import model.friend.Friend;
 import model.friend.FriendRequestsModel;
@@ -38,6 +40,7 @@ import view.tab.*;
  */
 public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants {
 
+    public static final boolean debug = false;
     FriendsModel friendsModel;
     MessagesTreeModel messagesModel;
     SubscriptionModel subscriptionModel;
@@ -48,8 +51,9 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
     SidePaneComponent comp;
     private JabRefFrame frame;
     private SidePaneManager manager;
-    private String name = "P2P Test";
+    private String name = "Jabref PP";
     private NetworkDealer dealer;
+    OpenDHTThread dht = new OpenDHTThread(this);
     JTabbedPane tabbedPane = new JTabbedPane();
     // chat
     private Map<Friend, IMDialog> imDialogs = new HashMap<Friend, IMDialog>();
@@ -59,12 +63,13 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
     private JPanel searchPanel = init2SearchPanel();
     /* requestID-> search*/
     private Map<String, ImportInspectionDialog> queryToResultMap = new HashMap<String, ImportInspectionDialog>();
-
     // tag collector
     TagsCollectorThread tagsCollectorThread = new TagsCollectorThread(120000, 1000, this);
     // profile dialog
     private Map<Friend, ProfileDialog> profileDialogs = new HashMap<Friend, ProfileDialog>();
     List<EntrySelectedListener> listeners = new Vector<EntrySelectedListener>();
+    // login frame
+    JDialog loginFrame;
 
     public SidePanel() {
     }
@@ -73,7 +78,7 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
         return FrameUtil.getTagFreqVisitor(frame);
     }
 
-    public void init(final JabRefFrame frame, SidePaneManager manager) {        
+    public void init(final JabRefFrame frame, SidePaneManager manager) {
         /*        for (int i = 0; i < frame.getTabbedPane().getTabCount(); i++) {
         final BasePanel bp = frame.baseAt(i);
         bp.mainTable.addSelectionListener(new ListEventListener<BibtexEntry>() {
@@ -122,13 +127,21 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
                 return name;
             }
         };
+
         comp.setLayout(new BorderLayout());
         try {
-            comp.add(new LoginTab(this));
+            loginFrame = new JDialog(frame, "Login/Register");
+            loginFrame.add(new LoginTab(this));
+            loginFrame.setLocationRelativeTo(null);
+            loginFrame.pack();
+            //loginFrame.setVisible(true);
+            //loginFrame.toFront();
+            //comp.add(new LoginTab(this));
         } catch (Exception e) {
             e.printStackTrace();
         }
         comp.setVisible(true);
+
         /*frame.getTabbedPane().addChangeListener(new ChangeListener() {
 
         public void stateChanged(ChangeEvent e) {
@@ -212,10 +225,13 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
     }
 
     public JMenuItem getMenuItem() {
-        JMenuItem item = new JMenuItem("P2P Test panel");
+        JMenuItem item = new JMenuItem("Jabref P2P");
         item.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
+                loginFrame.setVisible(true);
+                loginFrame.toFront();
+
                 manager.show(name);
             }
         });
@@ -237,32 +253,61 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
             new NewUserWizard(this).setVisible(true);
         }
 
-    //    DefaultMutableTreeNode friendNode = friendsModel.addGroup("Friends");
-    //    DefaultMutableTreeNode colleagueNode = friendsModel.addGroup("Colleagues");
-    //    friendsModel.addFriend(new Friend("Smith", "Smith", "127.0.0.1", 5150, 5151), colleagueNode);
-    //    friendsModel.addFriend(new Friend("Joe", "Joe", "127.0.0.1", 5152, 5153), friendNode);
-    //this.imDialogs = Collections.synchronizedMap(imDialogs);
+        //    DefaultMutableTreeNode friendNode = friendsModel.addGroup("Friends");
+        //    DefaultMutableTreeNode colleagueNode = friendsModel.addGroup("Colleagues");
+        //    friendsModel.addFriend(new Friend("Smith", "Smith", "127.0.0.1", 5150, 5151), colleagueNode);
+        //    friendsModel.addFriend(new Friend("Joe", "Joe", "127.0.0.1", 5152, 5153), friendNode);
+        //this.imDialogs = Collections.synchronizedMap(imDialogs);
     }
 
+    /**
+     * Call after user login
+     * @param panelToRemove not in used with new interface
+     */
     public void updateLoginUI(Component panelToRemove) {
         loadModels();
         // start login thread
         new ConnectFriendsThread(this, 1000).start();
         tagsCollectorThread.start();
 
+        // update my details for first time
+        dht.updateMyDetails();
+        try {
+            List<BibtexMessage> offlineMails = new OpenDHTHelper().getOfflineMessages(myProfile.getKeyPair());
+            for (BibtexMessage bibtexMessage : offlineMails) {
+                if (messagesModel.containsMessage(bibtexMessage) == false) {
+                    messagesModel.addMessage(bibtexMessage);
+                    System.out.println("offline message " + bibtexMessage);
+                    System.out.println(bibtexMessage.getFromFUID());
+                    System.out.println(bibtexMessage.getMsg());
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         // remove self and load friends panel
-        comp.remove(panelToRemove);
+        //comp.remove(panelToRemove);
+        loginFrame.setVisible(false);
+
         SelectedEntriesPanel selectedEntriesPanel = new SelectedEntriesPanel(this, "Actions for Selected Items");
         SplitPanel searchAndSelectedItems = new SplitPanel(selectedEntriesPanel, searchPanel, BorderLayout.NORTH);
         FriendRequestsView requestView = new FriendRequestsView(this);
         //comp.add(searchAndSelectedItems, BorderLayout.NORTH);
         //comp.add(requestView, BorderLayout.NORTH);
         comp.add(new SplitPanel(searchAndSelectedItems, requestView, BorderLayout.NORTH), BorderLayout.NORTH);
-        tabbedPane.addTab("Profile", new ImageIcon(Loader.get(PROFILE)), new ProfileTab(this));
-        tabbedPane.addTab("Inbox", new ImageIcon(Loader.get(INBOX)), new InboxTab(this));
-        tabbedPane.addTab("Subscribed", new ImageIcon(Loader.get(RSS)), new SubscriptionPanel(this, "Subscription"));
-        tabbedPane.addTab("Tags", new ImageIcon(Loader.get(TAG)), new TagsTab(this));
-        tabbedPane.add("Debug", new TestTab(this));
+
+        addTab("Profile", new ImageIcon(Loader.get(PROFILE)), new ProfileTab(this));
+        addTab("Inbox", new ImageIcon(Loader.get(INBOX)), new InboxTab(this));
+
+        JTabbedPane feedsTab = new JTabbedPane();
+        feedsTab.add("Status", new StatusPanel(this, true));
+        feedsTab.add("Subscription", new SubscriptionPanel(this, "Subscription"));
+
+        addTab("Newsfeed", new ImageIcon(Loader.get(RSS)), feedsTab);
+        addTab("Tags", new ImageIcon(Loader.get(TAG)), new TagsTab(this));
+        //addTab("Debug", null, new TestTab(this));
+
         comp.add(tabbedPane);
         // adjust height but keep existing width
         Dimension preferredDim = new Dimension(comp.getWidth(),
@@ -270,6 +315,20 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
         comp.setSize(preferredDim);
         tabbedPane.setSize(preferredDim);
         manager.updateView();
+    }
+
+    /**
+     * Wrapper method to add so can change implementation easily
+     * ie with text or w/o text
+     * @param title
+     * @param image
+     * @param c
+     */
+    private void addTab(String title, Icon image, Component c) {
+        tabbedPane.addTab(title, image, c);
+        //tabbedPane.addTab(null, image, c);
+        int insertedIndex = tabbedPane.getComponentCount() - 1;
+        tabbedPane.setToolTipTextAt(insertedIndex, title);
     }
 
     public void performSearch() {
@@ -626,7 +685,7 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
                 List<FileListEntry> fileListEntries = AccessLinksForEntries.getExternalLinksForEntries(Arrays.asList(bibtexEntry));
                 for (FileListEntry fileListEntry : fileListEntries) {
                     File f = new File(fileListEntry.getLink());
-                //System.out.println("xx" + fileListEntry.getLink());
+                    //System.out.println("xx" + fileListEntry.getLink());
                 }
                 // test add one
                 if (list.isEmpty()) {
@@ -638,8 +697,8 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
                 }
             }
 
-        //        frame.addBibEntries(list, "Friends' name", false);
-        //frame.addImportedEntries(frame.basePanel(), list, "Friends' name", false);
+            //        frame.addBibEntries(list, "Friends' name", false);
+            //frame.addImportedEntries(frame.basePanel(), list, "Friends' name", false);
         }
     }
 
@@ -656,6 +715,11 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
      * @param myTags
      */
     public void setMyTags(Map<String, Integer> myTags) {
+        StringBuilder sb = new StringBuilder();
+        for (String tag : myTags.keySet()) {
+            sb.append(tag).append(", ");
+        }
+        myProfile.setTags(sb.toString());
         tagCloudModel.setMyTags(myTags);
     }
 
@@ -720,7 +784,10 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
                 EntryEditor ee = bp.getEntryEditor(entry);
                 ee.remove(myEditor);
                 myEditor.setEntry(entry, bp);
+                //System.out.println(bp);
                 ee.add(myEditor, BorderLayout.EAST);
+                //ee.getParent().remove(ee);
+                ee.updateUI();
             }
         });
 
@@ -733,7 +800,7 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
                 for (EntrySelectedListener l : listeners) {
                     l.entrySelected(entry, bp);
                 }
-            //System.out.println(entry + ",");
+                //System.out.println(entry + ",");
             }
         };
 
@@ -779,5 +846,25 @@ public class SidePanel implements SidePanePlugin, ActionHandler, ImageConstants 
 
     public FriendReviewsModel getFriendReviewsModel() {
         return friendReviewsModel;
+    }
+
+    public OpenDHTThread getDht() {
+        return dht;
+    }
+
+    void sendOfflineMessage(Friend friend, DataPacket packet) {
+
+        int choice = JOptionPane.showConfirmDialog(this.getFrame(), friend.getName() + " is offline. This message will be sent when your friend login.");
+        if (choice == JOptionPane.YES_OPTION) {
+            System.out.println("please send offline");
+            try {
+                new OpenDHTHelper().sendOfflineMessage(myProfile.getKeyPair(), friend.getFUID(), packet.msg);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            System.out.println("nothing");
+        }
+
     }
 }
