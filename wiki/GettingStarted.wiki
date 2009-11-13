@@ -16,13 +16,13 @@ From the bottom options, choose "Download plugin", and enter <br/>http://jabrefp
 <br/><img src="http://jabrefpp.googlecode.com/files/downloadPlugin.png">
 
   c) *Restart Jabref*
-Shutdown and reopen your Jabref and the plugin "JabRef p2p" should be in your plugin tab now.
+Shutdown and reopen your Jabref and the plugin "Jabref p2p" should be in your plugin tab now.
 <br/><img src="http://jabrefpp.googlecode.com/files/installSuccess.png">
 
 
   2) Usage
-  a) Run the plugin with, *Plugins > JabRef p2p*
+  a) Run the plugin with, *Plugins > Jabref p2p*
 <br/><img src="http://jabrefpp.googlecode.com/files/runPlugin.png" width="700">
   b) *Enter a name*
-Just enter a name your friends will recognize. After entering your name, there is a built-in user guide to help you with the various functions to using JabRef p2p.
+Just enter a name your friends will recognize. After entering your name, there is a built-in user guide to help you with the various functions to using Jabref p2p.
 <br/><img src="http://jabrefpp.googlecode.com/files/enterName.png">
