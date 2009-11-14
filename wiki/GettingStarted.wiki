@@ -12,7 +12,8 @@ Run Jabref 2.5 and follow the 3 steps to install the plugin
 <br/><img src="http://jabrefpp.googlecode.com/files/managePlugin.png" width="700">
 
   b) *Download Plugin*
-From the bottom options, choose "Download plugin", and enter <br/>http://jabrefpp.googlecode.com/files/com.google.code.jabrefpp-1.0.jar
+<img src="http://jabrefpp.googlecode.com/files/pluginMenu.png">
+<br/>From the bottom options, choose "Download plugin", and enter <br/>http://jabrefpp.googlecode.com/files/com.google.code.jabrefpp-1.0.jar
 <br/><img src="http://jabrefpp.googlecode.com/files/downloadPlugin.png">
 
   c) *Restart Jabref*
