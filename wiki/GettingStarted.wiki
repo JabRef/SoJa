@@ -4,24 +4,25 @@
 =Requirement=
   * [http://sourceforge.net/projects/jabref/files/jabref/2.5/ Jabref 2.5],
   * Both friends need to have the plugin installed to see each other
-
+<hr/>
 =Getting Started=
   1) Installation
 Run Jabref 2.5 and follow the 3 steps to install the plugin
   a) *Plugins > Manage Plugins*
 <br/><img src="http://jabrefpp.googlecode.com/files/managePlugin.png" width="700">
-
+<hr/>
   b) *Download Plugin*
 <img src="http://jabrefpp.googlecode.com/files/pluginMenu.png">
 <br/>From the bottom options, choose "Download plugin", and enter <br/>http://jabrefpp.googlecode.com/files/com.google.code.jabrefpp-1.0.jar
 <br/><img src="http://jabrefpp.googlecode.com/files/downloadPlugin.png">
-
+<hr/>
   c) *Restart Jabref*
 Shutdown and reopen your Jabref and the plugin "Jabref p2p" should be in your plugin tab now.
 <br/><img src="http://jabrefpp.googlecode.com/files/installSuccess.png">
-
+<hr/>
 
   2) Usage
+  
   a) Run the plugin with, *Plugins > Jabref p2p*
 <br/><img src="http://jabrefpp.googlecode.com/files/runPlugin.png" width="700">
   b) *Enter a name*
