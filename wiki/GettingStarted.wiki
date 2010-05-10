@@ -24,7 +24,7 @@ Shutdown and reopen your Jabref and the plugin "Jabref p2p" should be in your pl
   2) Usage
   
   a) Run the plugin with, *Plugins > Jabref p2p*
-<br/><img src="http://jabrefpp.googlecode.com/files/JabRefP2P.png" width="700">
+<br/><img src="http://jabrefpp.googlecode.com/files/JabRefP2P.png" width="1000">
   b) *Enter a name*
 Just enter a name your friends will recognize. After entering your name, there is a built-in user guide to help you with the various functions to using Jabref p2p.
 <br/><img src="http://jabrefpp.googlecode.com/files/LogIn.png">
@@ -42,10 +42,10 @@ Once request to add friend has been propagated to the corresponding peer, friend
 <br/><img src="http://jabrefpp.googlecode.com/files/3.Friend Request Window.png">
   g) *Instant Messaging*
 Instant messaging can be performed among online peers. 
-<br/><img src="http://jabrefpp.googlecode.com/files/4.Chat window.png">
+
   h) *Register database to server and replication*
 Register database to server, store the database's records to server and replicate to some peers
-<br/><img src="http://jabrefpp.googlecode.com/files/Register and Replicate Database.png">
+<br/><img src="http://jabrefpp.googlecode.com/files/Register and Replicate Database.png" width="1000">
   i) *Search and Get Records*
 You are allowed to specify up to four criteria to search certain records in the server. the server return the hits and you can choose which peer you can contact to download the record.
 <br/><img src="http://jabrefpp.googlecode.com/files/search and get result.png">
