@@ -28,3 +28,6 @@ Shutdown and reopen your Jabref and the plugin "Jabref p2p" should be in your pl
   b) *Enter a name*
 Just enter a name your friends will recognize. After entering your name, there is a built-in user guide to help you with the various functions to using Jabref p2p.
 <br/><img src="http://jabrefpp.googlecode.com/files/enterName.png">
+  c) *For first time log-in user*
+A user guide will be shown and you can add friends using a friend finder or a manual invitation.
+<br/><img src="http://jabrefpp.googlecode.com/files/0.Guide For New user.png">  
