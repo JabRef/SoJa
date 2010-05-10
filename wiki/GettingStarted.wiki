@@ -42,7 +42,7 @@ Once request to add friend has been propagated to the corresponding peer, friend
 <br/><img src="http://jabrefpp.googlecode.com/files/3.Friend Request Window.png">
   g) *Instant Messaging*
 Instant messaging can be performed among online peers. 
-
+<br/><img src="http://jabrefpp.googlecode.com/files/4.Chat Window.png">
   h) *Register database to server and replication*
 Register database to server, store the database's records to server and replicate to some peers
 <br/><img src="http://jabrefpp.googlecode.com/files/Register and Replicate Database.png" width="1000">
