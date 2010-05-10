@@ -27,7 +27,19 @@ Shutdown and reopen your Jabref and the plugin "Jabref p2p" should be in your pl
 <br/><img src="http://jabrefpp.googlecode.com/files/JabRefP2P.png" width="700">
   b) *Enter a name*
 Just enter a name your friends will recognize. After entering your name, there is a built-in user guide to help you with the various functions to using Jabref p2p.
-<br/><img src="http://jabrefpp.googlecode.com/files/enterName.png">
+<br/><img src="http://jabrefpp.googlecode.com/files/LogIn.png">
   c) *For first time log-in user*
 A user guide will be shown and you can add friends using a friend finder or a manual invitation.
-<br/><img src="http://jabrefpp.googlecode.com/files/0.Guide For New user.png">  
+<br/><img src="http://jabrefpp.googlecode.com/files/0.Guide For New user.png">
+  d) *Friend finder*
+By using Open DHT library, this can detect presence of potential friends in the network and add those friends subsequently.
+<br/><img src="http://jabrefpp.googlecode.com/files/1.Friend Finder.png">
+  e) *Invitation to join JabRefP2P*
+If friend finder is not able to find the desired peers, this manual invitation can be sent to them by utilizing the invitation code.
+<br/><img src="http://jabrefpp.googlecode.com/files/2.Manual Invitation.png">
+  f) *Accepting Friend Request*
+Once request to add friend has been propagated to the corresponding peer, friend request window is displayed in the application. Peer has right to accept or reject the request. 
+<br/><img src="http://jabrefpp.googlecode.com/files/3.Friend Request Window.png">
+  g) *Instant Messaging*
+Instant messaging can be performed among online peers. 
+<br/><img src="http://jabrefpp.googlecode.com/files/4. Chat window.png">
