@@ -4,7 +4,7 @@
 =Requirement=
   * [http://sourceforge.net/projects/jabref/files/jabref/2.5/ Jabref 2.5],
   * Both friends need to have the plugin installed to see each other
-  * Server has to be setup and run in order the program can establish connection to server
+  * Server has to be setup and the code has to be run in order the program can establish connection to server
   * Client has to specify the address of server (ip address and port)
 <hr/>
 =Getting Started=
