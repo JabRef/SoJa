@@ -1,4 +1,4 @@
-#summary Using Jabref p2p to collaborate with others on Jabref
+#summary Using Social Jabref (SoJa) to collaborate with others on Jabref
 #labels Featured
 
 =Requirement=
